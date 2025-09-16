@@ -69,7 +69,7 @@ def iso_to_datetime(value: str) -> datetime:
 
 def main() -> None:
     args = parse_args()
-    now = datetime.utcnow()
+    now = datetime.now()
     if args.end:
         end = iso_to_datetime(args.end)
     else:
