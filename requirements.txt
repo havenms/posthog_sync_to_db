@@ -1,0 +1,6 @@
+SQLAlchemy
+sqlalchemy-utils
+python-dotenv
+pymysql
+cryptography
+requests
