@@ -4,3 +4,4 @@ python-dotenv
 pymysql
 cryptography
 requests
+psycopg2-binary

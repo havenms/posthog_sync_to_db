@@ -67,7 +67,7 @@ if not all([_db_user, _db_pass, _db_host, _db_port, _db_name]):
     )
 
 engine = create_engine(
-    f"mysql+pymysql://{_db_user}:{_db_pass}@{_db_host}:{_db_port}/{_db_name}",
+    f"postgresql+psycopg2://{_db_user}:{_db_pass}@{_db_host}:{_db_port}/{_db_name}",
     pool_pre_ping=True,
 )
 Base = declarative_base()
