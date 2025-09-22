@@ -59,6 +59,7 @@ _db_pass = os.getenv("DB_PASS")
 _db_host = os.getenv("DB_HOST")
 _db_port = os.getenv("DB_PORT")
 _db_name = os.getenv("DB_NAME")
+_schema_name = os.getenv("SCHEMA_NAME")
 
 if not all([_db_user, _db_pass, _db_host, _db_port, _db_name]):
     raise EnvironmentError(
@@ -67,7 +68,7 @@ if not all([_db_user, _db_pass, _db_host, _db_port, _db_name]):
     )
 
 engine = create_engine(
-    f"postgresql+psycopg2://{_db_user}:{_db_pass}@{_db_host}:{_db_port}/{_db_name}",
+    f"postgresql+psycopg2://{_db_user}:{_db_pass}@{_db_host}:{_db_port}/{_db_name}?options=-csearch_path%3D{_schema_name}",
     pool_pre_ping=True,
 )
 Base = declarative_base()
