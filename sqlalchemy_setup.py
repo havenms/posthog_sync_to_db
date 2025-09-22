@@ -67,11 +67,18 @@ if not all([_db_user, _db_pass, _db_host, _db_port, _db_name]):
         "Please set DB_USER, DB_PASS, DB_HOST, DB_PORT, and DB_NAME."
     )
 
-engine = create_engine(
-    f"postgresql+psycopg2://{_db_user}:{_db_pass}@{_db_host}:{_db_port}/{_db_name}?options=-csearch_path%3D{_schema_name}",
-    pool_pre_ping=True,
-)
-Base = declarative_base()
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+
+TABLE_PREFIX = "posthog_"
+
+class CustomBase:
+    @declared_attr
+    def __tablename__(cls):
+        return TABLE_PREFIX + cls.__name__.lower()
+
+# Engine + Session
+engine = create_engine(f'postgresql+psycopg2://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}?options=-csearch_path%3D{os.getenv("SCHEMA_NAME")}')
+Base    = declarative_base(cls=CustomBase)
 SessionLocal = sessionmaker(bind=engine)
 
 # ---------------------------------------------------------------------------
@@ -96,8 +103,7 @@ class ClickEvent(Base):
     The ``id`` column uses the PostHog event UUID directly as the primary key.
     The ``raw_data`` column preserves the complete JSON payload for reference.
     """
-
-    __tablename__ = "click_events"
+    
     # Use the PostHog event UUID as the primary key for easy deduplication
     id = Column(String(50), primary_key=True)
     distinct_id = Column(String(255), nullable=False, index=True)
