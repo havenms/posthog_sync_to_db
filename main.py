@@ -77,7 +77,7 @@ def main() -> None:
     if args.start:
         start = iso_to_datetime(args.start)
     else:
-        start = end - timedelta(days=1)
+        start = end - timedelta(days=3)
 
     logging.info(f"Syncing PostHog events from {start.isoformat()} to {end.isoformat()} with event name '{args.event_name}'")
     inserted = sync_posthog_events(start=start, end=end, event_name=args.event_name, limit=args.limit)
